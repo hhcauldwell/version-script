@@ -5,6 +5,7 @@ var assert = require('assert');
 var Promise = require('bluebird');
 var yargs = require('yargs');
 var _ = require('lodash');
+var chalk = require('chalk');
 
 var argv = yargs.argv;
 
@@ -62,15 +63,39 @@ Framework.get = function(id) {
 
 Framework.prototype.version = function() {
   // Stubbed out.
-  return Promise.resolve('1.0.0');
+  return Promise.delay(5000)
+  .return('1.0.0');
 }
 
-Promise.join(
-  Image.get(),
-  Framework.get(),
-  function(images, frameworks) {
-    return Promise.each(images, function(image) {
-      console.log(image.id);
+var failedChecks = 0;
+
+Image.get()
+.mapSeries(function(image) {
+  console.log('Checking: ' + image.id);
+  return Framework.get(image.id)
+  .then(function(framework) {
+    return Promise.join(image.version(), framework.version(),
+      function(imageVersion, frameworkVersion) {
+        if (imageVersion === frameworkVersion) {
+          console.log(chalk.green('Status: OK\n'));
+        } else {
+          failedChecks += 1;
+          console.log(chalk.red('%s != %s', imageVersion, frameworkVersion));
+          console.log(chalk.red('Status: Failed\n'));
+        }
     });
+  })
+  .catch(function(err) {
+    failedChecks += 1;
+    console.log(chalk.red('ERR: ' + err.message));
+    console.log(chalk.red('ERR: ' + err.stack));
+  });
+})
+.then(function() {
+  if (failedChecks === 0) {
+    console.log(chalk.green('Status: All checks passed.'));
+  } else {
+    console.log(chalk.red('Status: ' + failedChecks + ' checks failed!'));
   }
-);
+  process.exit(failedChecks);
+});
