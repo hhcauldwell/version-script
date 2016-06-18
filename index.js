@@ -79,8 +79,10 @@ var docker = new Docker({
 function Image(opts) {
   assert.equal(typeof opts, 'object');
   assert.equal(typeof opts.id, 'string');
+  assert.equal(typeof opts.data, 'object');
   if (this instanceof Image) {
     this.id = opts.id;
+    this.data = opts.data;
     this.opts = opts;
   } else {
     return new Image(opts);
@@ -89,20 +91,36 @@ function Image(opts) {
 
 Image.get = function(id) {
   assert.equal(typeof id, 'string');
+  var self = this;
+  var tag = 'us.gcr.io/coderpad-1189/coderpad:' + id;
   return Promise.fromNode(function(cb) {
     docker.listImages(cb);
   })
   .filter(function(image) {
-    console.log(image);
+    return _.includes(image.RepoTags, tag);
   })
-  .then(function() {
-    return new Image({id: id});
+  .then(function(images) {
+    assert(images.length < 2);
+    if (images.length === 1) {
+      return new Image({
+        id: id,
+        data: images[0]
+      });
+    } else {
+      throw new Error('Image not found: ' + id);
+    }
   });
 }
 
 Image.prototype.version = function() {
-  // Stubbed out
-  return Promise.resolve({version: '1.0.0'});
+  var version = _.get(this.data, 'Labels[\'version\']');
+  if (!version) {
+    //throw new Error('Version label not found.');
+    version = 'Version label not found';
+  }
+  return Promise.resolve({
+    version: version
+  });
 }
 
 function Framework(opts) {
@@ -163,6 +181,7 @@ Language.getAll()
           imageVersion.version,
           frameworkVersion.version
         )));
+        console.log(chalk.red('Updated: ' + frameworkVersion.updated));
         console.log(chalk.red('Status: Failed'));
       }
     });
@@ -170,7 +189,7 @@ Language.getAll()
   .catch(function(err) {
     failedChecks += 1;
     console.log(chalk.red('ERR: ' + err.message));
-    //console.log(chalk.red('ERR: ' + err.stack));
+    console.log(chalk.red('ERR: ' + err.stack));
   });
 })
 .then(function() {
