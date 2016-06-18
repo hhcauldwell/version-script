@@ -157,10 +157,15 @@ Framework.prototype.version = function() {
   return scraper.scrape();
 }
 
+var totalChecks = 0;
 var failedChecks = 0;
 
 // Get list of all languages.
 Language.getAll()
+// Set total number of checks.
+.tap(function(languages) {
+  totalChecks = languages.length;
+})
 // Iterate in series over each language.
 .mapSeries(function(language) {
   // Start.
@@ -194,9 +199,16 @@ Language.getAll()
 })
 .then(function() {
   if (failedChecks === 0) {
-    console.log(chalk.green('\nStatus: All checks passed.'));
+    console.log(chalk.green(util.format(
+      '\nStatus: All %s checks passed.',
+      totalChecks
+    )));
   } else {
-    console.log(chalk.red('\nStatus: ' + failedChecks + ' checks failed!'));
+    console.log(chalk.red(util.format(
+      '\nStatus: %s of %s total checks failed!',
+      failedChecks,
+      totalChecks
+    )));
   }
   process.exit(failedChecks);
 });
