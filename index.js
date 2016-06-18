@@ -63,7 +63,7 @@ Image.get = function(id) {
 
 Image.prototype.version = function() {
   // Stubbed out
-  return Promise.resolve('1.0.0');
+  return Promise.resolve({version: '1.0.0'});
 }
 
 function Framework(opts) {
@@ -89,7 +89,9 @@ Framework.get = function(id) {
 }
 
 Framework.prototype.version = function() {
-  var url = 'https://en.wikipedia.org/wiki/Node.js';
+  //var url = 'https://en.wikipedia.org/wiki/Node.js';
+  //var url = 'https://en.wikipedia.org/wiki/C_(programming_language)';
+  var url = 'https://en.wikipedia.org/wiki/Scala_(programming_language)';
   var scraper = scrapers.WikiScraper({url: url});
   return scraper.scrape();
 }
@@ -103,16 +105,18 @@ Image.get()
   .then(function(framework) {
     return Promise.join(image.version(), framework.version(),
       function(imageVersion, frameworkVersion) {
-        if (imageVersion === frameworkVersion) {
-          console.log(chalk.gray(
-            util.format('%s = %s', imageVersion, frameworkVersion))
-          );
+        if (imageVersion.version === frameworkVersion.version) {
+          console.log(chalk.gray(util.format('%s = %s',
+            imageVersion.version,
+            frameworkVersion.version
+          )));
           console.log(chalk.green('Status: OK\n'));
         } else {
           failedChecks += 1;
-          console.log(chalk.red(
-            util.format('%s != %s', imageVersion, frameworkVersion))
-          );
+          console.log(chalk.red(util.format('%s != %s',
+            imageVersion.version,
+            frameworkVersion.version
+          )));
           console.log(chalk.red('Status: Failed\n'));
         }
     });
