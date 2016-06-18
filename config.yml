@@ -1,0 +1,39 @@
+languages:
+  c:
+    url: https://en.wikipedia.org/wiki/C_(programming_language)
+  clojure:
+    url: https://en.wikipedia.org/wiki/Clojure
+  coffeescript:
+    url: https://en.wikipedia.org/wiki/CoffeeScript
+  csharp:
+    url: https://en.wikipedia.org/wiki/C_Sharp_(programming_language)
+  erlang:
+    url: https://en.wikipedia.org/wiki/Erlang_(programming_language)
+  go:
+    url: https://en.wikipedia.org/wiki/Go_(programming_language)
+  haskell:
+    url: https://en.wikipedia.org/wiki/Haskell_(programming_language)
+  javascript:
+    https://en.wikipedia.org/wiki/Node.js
+  mysql:
+    url: https://en.wikipedia.org/wiki/MySQL
+  objc:
+    url: https://en.wikipedia.org/wiki/Objective-C
+  perl:
+    url: https://en.wikipedia.org/wiki/Perl
+  php:
+    url: https://en.wikipedia.org/wiki/PHP
+  python:
+    url: https://en.wikipedia.org/wiki/Python_(programming_language)
+  python3:
+    url: https://en.wikipedia.org/wiki/Python_(programming_language)
+  r:
+    url: https://en.wikipedia.org/wiki/R_(programming_language)
+  ruby:
+    url: https://en.wikipedia.org/wiki/Ruby_(programming_language)
+  scala:
+    url: https://en.wikipedia.org/wiki/Scala_(programming_language)
+  swift:
+    url: https://en.wikipedia.org/wiki/Swift_(programming_language)
+  vb:
+    url: https://en.wikipedia.org/wiki/Visual_Basic
