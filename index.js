@@ -12,7 +12,53 @@ var argv = yargs.argv;
 
 var scrapers = require('./lib/scrapers.js');
 
-/*var Docker = require('dockerode');
+function Language(opts) {
+  assert.equal(typeof opts, 'object');
+  assert.equal(typeof opts.id, 'string');
+  if (this instanceof Language) {
+    this.opts = opts;
+    this.id = opts.id;
+  } else {
+    return new Language(opts);
+  }
+}
+
+Language.getAll = function() {
+  return Language.get();
+}
+
+Language.get  = _.once(function() {
+  var ids = [
+    'c',
+    'clojure',
+    'coffeescript',
+    'cpp',
+    'csharp',
+    'erlang',
+    'go',
+    'haskell',
+    'java',
+    'javascript',
+    'mysql',
+    'objc',
+    'perl',
+    'php',
+    'python',
+    'python3',
+    'r',
+    'ruby',
+    'scala',
+    'swift',
+    'vb'
+  ];
+  return Promise.map(ids, function(id) {
+    return new Language({
+      id: id
+    });
+  });
+});
+
+var Docker = require('dockerode');
 
 var opts = {
   docker: {
@@ -25,7 +71,7 @@ var docker = new Docker({
   socketPath: '/var/run/docker.sock'
   //host: opts.docker.host,
   //port: opts.docker.port
-});*/
+});
 
 function Image(opts) {
   assert.equal(typeof opts, 'object');
@@ -98,10 +144,48 @@ Framework.prototype.version = function() {
 
 var failedChecks = 0;
 
-Image.get()
-.mapSeries(function(image) {
-  console.log('Checking: ' + image.id);
-  return Framework.get(image.id)
+// Get list of all languages.
+Language.getAll()
+// Iterate in series over each language.
+.mapSeries(function(language) {
+  // Start.
+  console.log('Checking: ' + language.id);
+  return Promise.join(Image.get(language.id), Framework.get(language.id),
+  function(image, framework) {
+    return Promise.join(image.version(), framework.version(),
+    function(imageVersion, frameworkVersion) {
+      if (imageVersion.version === frameworkVersion.version) {
+        console.log(chalk.gray(util.format('%s = %s',
+          imageVersion.version,
+          frameworkVersion.version
+        )));
+        console.log(chalk.green('Status: OK\n'));
+      } else {
+        failedChecks += 1;
+        console.log(chalk.red(util.format('%s != %s',
+          imageVersion.version,
+          frameworkVersion.version
+        )));
+        console.log(chalk.red('Status: Failed\n'));
+      }
+    });
+  })
+  .catch(function(err) {
+    failedChecks += 1;
+    console.log(chalk.red('ERR: ' + err.message));
+    console.log(chalk.red('ERR: ' + err.stack));
+  });
+})
+.then(function() {
+  if (failedChecks === 0) {
+    console.log(chalk.green('Status: All checks passed.'));
+  } else {
+    console.log(chalk.red('Status: ' + failedChecks + ' checks failed!'));
+  }
+  process.exit(failedChecks);
+});
+
+  /*return Framework.get(image.id)
   .then(function(framework) {
     return Promise.join(image.version(), framework.version(),
       function(imageVersion, frameworkVersion) {
@@ -134,4 +218,4 @@ Image.get()
     console.log(chalk.red('Status: ' + failedChecks + ' checks failed!'));
   }
   process.exit(failedChecks);
-});
+});*/
