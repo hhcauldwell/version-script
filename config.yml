@@ -1,3 +1,5 @@
+docker:
+  tagPrefix: us.gcr.io/coderpad-1189/coderpad
 languages:
   c:
     url: https://en.wikipedia.org/wiki/C_(programming_language)
@@ -25,6 +27,7 @@ languages:
     url: https://en.wikipedia.org/wiki/PHP
   python:
     url: https://en.wikipedia.org/wiki/Python_(programming_language)
+    scraper: PythonScraper
   python3:
     url: https://en.wikipedia.org/wiki/Python_(programming_language)
   r:
