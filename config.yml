@@ -7,6 +7,8 @@ languages:
     url: https://en.wikipedia.org/wiki/Clojure
   coffeescript:
     url: https://en.wikipedia.org/wiki/CoffeeScript
+  cpp:
+    url: https://en.wikipedia.org/wiki/GNU_Compiler_Collection
   csharp:
     url: https://en.wikipedia.org/wiki/C_Sharp_(programming_language)
   erlang:
@@ -16,11 +18,12 @@ languages:
   haskell:
     url: https://en.wikipedia.org/wiki/Haskell_(programming_language)
   javascript:
-    https://en.wikipedia.org/wiki/Node.js
+    url: https://en.wikipedia.org/wiki/Node.js
+    scraper: JavascriptScraper
   mysql:
     url: https://en.wikipedia.org/wiki/MySQL
   objc:
-    url: https://en.wikipedia.org/wiki/Objective-C
+    url: https://en.wikipedia.org/wiki/Clang
   perl:
     url: https://en.wikipedia.org/wiki/Perl
   php:
