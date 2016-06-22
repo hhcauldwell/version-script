@@ -16,6 +16,7 @@
     "lodash": "^4.13.1",
     "yamljs": "^0.2.7",
     "yargs": "^4.7.1",
-    "verror": "~1.6.1"
+    "verror": "~1.6.1",
+    "memory-streams": "~0.1.0"
   }
 }

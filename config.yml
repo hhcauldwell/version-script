@@ -2,44 +2,79 @@ docker:
   tagPrefix: us.gcr.io/coderpad-1189/coderpad
 languages:
   c:
-    url: https://en.wikipedia.org/wiki/C_(programming_language)
+    url: https://en.wikipedia.org/wiki/GNU_Compiler_Collection
+    cmd: gcc --version
+    cmd-parser: \) (.*)
   clojure:
     url: https://en.wikipedia.org/wiki/Clojure
   coffeescript:
     url: https://en.wikipedia.org/wiki/CoffeeScript
+    cmd: coffee --version
+    cmd-parser: version ([^ ]*)
   cpp:
     url: https://en.wikipedia.org/wiki/GNU_Compiler_Collection
+    cmd: g++ --version
+    cmd-parser: \) (.*)
   csharp:
-    url: https://en.wikipedia.org/wiki/C_Sharp_(programming_language)
+    url: https://en.wikipedia.org/wiki/Mono_(software)
+    cmd: mono --version
+    cmd-parser: version ([^ ]*)
   erlang:
     url: https://en.wikipedia.org/wiki/Erlang_(programming_language)
   go:
     url: https://en.wikipedia.org/wiki/Go_(programming_language)
+    cmd: go version
+    cmd-parser: go version go([^ ]*)
   haskell:
-    url: https://en.wikipedia.org/wiki/Haskell_(programming_language)
+    url: https://en.wikipedia.org/wiki/Glasgow_Haskell_Compiler
+    cmd: ghc --version
+    cmd-parser: version ([^ ]*)
   javascript:
     url: https://en.wikipedia.org/wiki/Node.js
     scraper: JavascriptScraper
+    cmd: node --version
+    cmd-parser: v(.*)
   mysql:
     url: https://en.wikipedia.org/wiki/MySQL
+    cmd: mysql -V
+    cmd-parser: Distrib ([^ ,]*)
   objc:
     url: https://en.wikipedia.org/wiki/Clang
+    cmd: clang --version
+    cmd-parser: version ([^ ]*)
   perl:
     url: https://en.wikipedia.org/wiki/Perl
+    cmd: perl -v
+    cmd-parser: \(v(.*)\)
   php:
     url: https://en.wikipedia.org/wiki/PHP
+    cmd: php -v
+    cmd-parser: PHP ([^ -]*)
   python:
     url: https://en.wikipedia.org/wiki/Python_(programming_language)
     scraper: PythonScraper
+    cmd: python --version
+    cmd-parser: Python (.*)
   python3:
     url: https://en.wikipedia.org/wiki/Python_(programming_language)
+    cmd: pip3 -V
+    cmd-parser: \(python (.*)\)
   r:
     url: https://en.wikipedia.org/wiki/R_(programming_language)
+    cmd: R --version
+    cmd-parser: R version ([^ ]*)
   ruby:
     url: https://en.wikipedia.org/wiki/Ruby_(programming_language)
+    cmd: ruby -v
+    cmd-parser: ruby ([^ ]*)
   scala:
     url: https://en.wikipedia.org/wiki/Scala_(programming_language)
+    cmd: scala -version
+    cmd-parser: version ([^ ]*)
   swift:
     url: https://en.wikipedia.org/wiki/Swift_(programming_language)
+    cmd: swift --version
   vb:
-    url: https://en.wikipedia.org/wiki/Visual_Basic
+    url: https://en.wikipedia.org/wiki/Mono_(software)
+    cmd: mono --version
+    cmd-parser: version ([^ ]*)
