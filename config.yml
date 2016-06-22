@@ -29,6 +29,11 @@ languages:
     url: https://en.wikipedia.org/wiki/Glasgow_Haskell_Compiler
     cmd: ghc --version
     cmd-parser: version ([^ ]*)
+  java:
+    url: https://en.wikipedia.org/wiki/Java_(software_platform)
+    scraper: JavaScraper
+    cmd: java -version
+    cmd-parser: java version "(.*)"
   javascript:
     url: https://en.wikipedia.org/wiki/Node.js
     scraper: JavascriptScraper
@@ -41,7 +46,7 @@ languages:
   objc:
     url: https://en.wikipedia.org/wiki/Clang
     cmd: clang --version
-    cmd-parser: version ([^ ]*)
+    cmd-parser: version ([^ -]*)
   perl:
     url: https://en.wikipedia.org/wiki/Perl
     cmd: perl -v
@@ -74,6 +79,7 @@ languages:
   swift:
     url: https://en.wikipedia.org/wiki/Swift_(programming_language)
     cmd: swift --version
+    cmd-parser: Swift version ([^ ]*)
   vb:
     url: https://en.wikipedia.org/wiki/Mono_(software)
     cmd: mono --version
