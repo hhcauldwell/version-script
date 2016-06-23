@@ -8,6 +8,7 @@ var Promise = require('bluebird');
 var yargs = require('yargs');
 var _ = require('lodash');
 var chalk = require('chalk');
+var dateFormat = require('date-format');
 
 // Get command line arguments and options.
 var argv = yargs.argv;
@@ -51,22 +52,21 @@ languages.getAll()
     function(imageVersion, languageVersion) {
       // Compare image version vs language version.
       var compareResult = imageVersion.compare(languageVersion);
+      console.log('image version:    ' + imageVersion.version);
+      console.log('language version: ' + languageVersion.version);
+      console.log('image updated:    '
+        + dateFormat('MM/dd/yyyy', imageVersion.updated));
+      console.log('language updated: '
+        + dateFormat('MM/dd/yyyy', new Date(languageVersion.updated)));
       if (compareResult === true) {
         // OK exact match.
-        console.log('image version:    ' + imageVersion.version);
-        console.log('language version: ' + languageVersion.version);
         console.log(chalk.green('Status:           OK'));
       } else if (compareResult === 'patch') {
         // OK but patch version differs.
-        console.log('image version:    ' + imageVersion.version);
-        console.log('language version: ' + languageVersion.version);
         console.log(chalk.yellow('Status:           OK'));
       } else {
         // Failure not a match.
         failedChecks += 1;
-        console.log('image version:    ' + imageVersion.version);
-        console.log('language version: ' + languageVersion.version);
-        console.log('Updated:          ' + languageVersion.updated);
         console.log(chalk.red('Status:           Failed'));
       }
     });
