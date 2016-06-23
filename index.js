@@ -49,17 +49,24 @@ languages.getAll()
     // Get image and language versions.
     return Promise.join(image.version(), language.version(),
     function(imageVersion, languageVersion) {
-      if (imageVersion.version === languageVersion.version) {
-        // OK.
-        console.log(chalk.gray('image version:    ' + imageVersion.version));
-        console.log(chalk.gray('language version: ' + languageVersion.version));
+      // Compare image version vs language version.
+      var compareResult = imageVersion.compare(languageVersion);
+      if (compareResult === true) {
+        // OK exact match.
+        console.log('image version:    ' + imageVersion.version);
+        console.log('language version: ' + languageVersion.version);
         console.log(chalk.green('Status:           OK'));
+      } else if (compareResult === 'patch') {
+        // OK but patch version differs.
+        console.log('image version:    ' + imageVersion.version);
+        console.log('language version: ' + languageVersion.version);
+        console.log(chalk.yellow('Status:           OK'));
       } else {
-        // Failure.
+        // Failure not a match.
         failedChecks += 1;
-        console.log(chalk.red('image version:    ' + imageVersion.version));
-        console.log(chalk.red('language version: ' + languageVersion.version));
-        console.log(chalk.red('Updated:          ' + languageVersion.updated));
+        console.log('image version:    ' + imageVersion.version);
+        console.log('language version: ' + languageVersion.version);
+        console.log('Updated:          ' + languageVersion.updated);
         console.log(chalk.red('Status:           Failed'));
       }
     });
