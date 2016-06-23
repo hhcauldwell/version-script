@@ -55,9 +55,9 @@ languages.getAll()
       console.log('image version:    ' + imageVersion.version);
       console.log('language version: ' + languageVersion.version);
       console.log('image updated:    '
-        + dateFormat('MM/dd/yyyy', imageVersion.updated));
+        + dateFormat('yyyy/MM/dd', imageVersion.updated));
       console.log('language updated: '
-        + dateFormat('MM/dd/yyyy', new Date(languageVersion.updated)));
+        + dateFormat('yyyy/MM/dd', languageVersion.updated));
       if (compareResult === true) {
         // OK exact match.
         console.log(chalk.green('Status:           OK'));
