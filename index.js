@@ -9,6 +9,8 @@ var yargs = require('yargs');
 var _ = require('lodash');
 var chalk = require('chalk');
 var dateFormat = require('date-format');
+var table = require('text-table');
+var moment = require('moment');
 
 // Get command line arguments and options.
 var argv = yargs.argv;
@@ -52,22 +54,42 @@ languages.getAll()
     function(imageVersion, languageVersion) {
       // Compare image version vs language version.
       var compareResult = imageVersion.compare(languageVersion);
-      console.log('image version:    ' + imageVersion.version);
-      console.log('language version: ' + languageVersion.version);
-      console.log('image updated:    '
-        + dateFormat('yyyy/MM/dd', imageVersion.updated));
-      console.log('language updated: '
-        + dateFormat('yyyy/MM/dd', languageVersion.updated));
+      // Build table.
+      console.log(table([
+        ['', 'version', 'updated'],
+        [
+          'image',
+          imageVersion.version,
+          imageVersion.updated
+            ? util.format(
+                '%s (%s)',
+                imageVersion.updated.format('YYYY/MM/DD'),
+                moment.duration(moment().diff(imageVersion.updated)).humanize()
+              )
+            : ''
+        ],
+        [
+          'language',
+          languageVersion.version,
+          languageVersion.updated
+            ? util.format(
+                '%s (%s)',
+                languageVersion.updated.format('YYYY/MM/DD'),
+                moment.duration(moment().diff(languageVersion.updated)).humanize()
+              )
+            : ''
+        ]
+      ]));
       if (compareResult === true) {
         // OK exact match.
-        console.log(chalk.green('Status:           OK'));
+        console.log(chalk.green('Status: OK'));
       } else if (compareResult === 'patch') {
         // OK but patch version differs.
-        console.log(chalk.yellow('Status:           OK'));
+        console.log(chalk.yellow('Status: OK'));
       } else {
         // Failure not a match.
         failedChecks += 1;
-        console.log(chalk.red('Status:           Failed'));
+        console.log(chalk.red('Status: Failed'));
       }
     });
   })
